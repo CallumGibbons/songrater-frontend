@@ -1,39 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
 interface Song {
-    songName: string;
-    artistName: string;
-    lastListened: Date;
-    numberOfListens: number;
-    songId: number;
-    isfavourite: boolean;
-    songRating: number;
-    songImage: string;
-    songAlbum: string;
+  "Listening Time": string;
+  "Artist Name": string;
+  "Album Name": string;
+  "Song Name": string;
 }
 
-interface LeaderboardProps {
-    songs: Song[];
-}
+const Leaderboard: React.FC = () => {
+  const [listeningHistory, setListeningHistory] = useState<Song[]>([]);
 
-const Leaderboard: React.FC<LeaderboardProps> = ({ songs }) => {
-    // Sort songs by last listened time
-    const sortedSongs = [...songs].sort((a, b) => b.lastListened.getTime() - a.lastListened.getTime());
+  useEffect(() => {
+    fetch("/CaldogTheGreat.json")
+      .then((response) => response.json())
+      .then((data) => setListeningHistory(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
-    return (
-        <div className="leaderboard">
-            <h2>Song Leaderboard</h2>
-            <ol>
-                {sortedSongs.map((song, index) => (
-                    <li key={index}>
-                        <span>{song.songName}</span>
-                        <span> by {song.artistName}</span>
-                        <span>Last Listened: {song.lastListened.toLocaleString()}</span>
-                    </li>
-                ))}
-            </ol>
+  const sortedSongs = [...listeningHistory].sort(
+    (a, b) =>
+      new Date(b["Listening Time"]).getTime() -
+      new Date(a["Listening Time"]).getTime()
+  );
+
+  return (
+    <div>
+      <h1>Leaderboard</h1>
+      {sortedSongs.map((song, index) => (
+        <div key={index}>
+          <p>Song: {song["Song Name"]}</p>
+          <p>Artist: {song["Artist Name"]}</p>
+          <p>
+            Last Listened: {new Date(song["Listening Time"]).toLocaleString()}
+          </p>
         </div>
-    );
+      ))}
+    </div>
+  );
 };
 
 export default Leaderboard;
