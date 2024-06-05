@@ -1,3 +1,8 @@
+import React, { useState } from 'react';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+
+
 interface SongCardProps {
     albumName: string;
     artistName: string;
@@ -19,6 +24,11 @@ const SongCard: React.FC<SongCardProps> = ({
     lastListened,
     imageUrl
 }) => {
+    const [isFavourited, setIsFavourited] = useState(isFavourite);
+
+    const toggleFavourite = () => {
+        setIsFavourited((prevIsFavourited) => !prevIsFavourited);
+    };
     return (
         <div className="album-card">
             <img src={imageUrl} alt={albumName} />
@@ -26,7 +36,9 @@ const SongCard: React.FC<SongCardProps> = ({
             <h2>{albumName}</h2>
             <h3>{artistName}</h3>
             <p>Rating: {songRating}</p>
-            <p>{isFavourite ? 'Favourite' : 'Not Favourite'}</p>
+            <button onClick={toggleFavourite}>
+                {isFavourited ? <StarIcon /> : <StarBorderIcon />}
+            </button>
             <p>Listens: {numberOfListens}</p>
             <p>Last Listened: {lastListened.toLocaleString()}</p>
         </div>

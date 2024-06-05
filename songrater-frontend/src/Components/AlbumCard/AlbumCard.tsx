@@ -18,10 +18,11 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
     artistName,
     albumRating,
     numberOfListens,
+    isFavourite,
     lastListened,
     imageUrl
 }) => {
-    const [isFavourited, setIsFavourited] = useState(false);
+    const [isFavourited, setIsFavourited] = useState(isFavourite);
     const toggleFavourite = () => {
         setIsFavourited((prevIsFavourited) => !prevIsFavourited);
     };
@@ -33,7 +34,8 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
             <p>Rating: {albumRating}</p>
             <button onClick={toggleFavourite}>
                 {isFavourited ? <StarIcon /> : <StarBorderIcon />}
-            </button><p>Listens: {numberOfListens}</p>
+            </button>
+            <p>Listens: {numberOfListens}</p>
             <p>Last Listened: {lastListened.toLocaleString()}</p>
         </div>
     );
